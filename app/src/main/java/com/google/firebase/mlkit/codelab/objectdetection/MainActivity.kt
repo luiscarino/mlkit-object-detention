@@ -112,11 +112,16 @@ class MainActivity : AppCompatActivity(),
             .addOnSuccessListener {
                 // Task completed successfully
                 debugPrint(it)
+                // Post-detection processing : draw result
+                val drawingView = DrawingView(getApplicationContext(), it)
+                drawingView.draw(Canvas(bitmap))
+                runOnUiThread { imageView.setImageBitmap(bitmap) }
             }
             .addOnFailureListener {
                 // Task failed with an exception
                 Toast.makeText(baseContext, "Oops, something went wrong!",
                     Toast.LENGTH_SHORT).show()
+                Log.d("MLKit-ODT", "Something went wrong in detector.processImage(image) ${it.message}")
             }
     }
 
